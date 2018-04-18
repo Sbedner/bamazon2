@@ -4,7 +4,7 @@ var inquirer = require("inquirer");
 var mysql = require("mysql");
 var fs = require("fs");
 
-
+// connecting to the mysql database
 var connection = mysql.createConnection({
   host: "localhost",
   port: 3306,
@@ -16,13 +16,12 @@ var connection = mysql.createConnection({
 
 connection.connect(function (err) {
 
-
 });
 
-var itemlist = connection.query("SELECT * FROM products");
+// call function that initializes program
 start();
 
-
+// function that initializes program
 function start() {
   inquirer
   .prompt([
@@ -41,7 +40,7 @@ function start() {
 
 
 
-
+// function that allows orders to be placed
 
 function purchase() {
   connection.query("SELECT * FROM products", function (err, results) {
@@ -77,7 +76,7 @@ function purchase() {
         }
        
         if (chosenProduct.stock_quantity >= parseInt(answer.buy)) {
-          // bid was high enough, so update db, let the user know, and start over
+          // quantity ordered is available, so update db, let the user know
           connection.query(
             "UPDATE products SET ? WHERE ?",
             [
@@ -93,6 +92,7 @@ function purchase() {
               console.log("purchase complete product quantity updated");
               var cost = parseFloat(answer.buy * chosenProduct.price).toFixed(2);
               console.log("Your total purchase cost is  $" + cost);
+              // start process over
               start();
             }
           );
@@ -100,6 +100,7 @@ function purchase() {
         else {
           // not enough product to fulfill order
           console.log("Available quantity too low. Choose another quantity or product");
+          // start process over
           start();
         }
 
