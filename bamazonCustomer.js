@@ -54,7 +54,7 @@ function purchase() {
           choices: function () {
             var choiceArray = [];
             for (var i = 0; i < results.length; i++) {
-              choiceArray.push(results[i].product_name);
+              choiceArray.push(results[i].product_name+"  $"+results[i].price);
             }
             return choiceArray;
           },
